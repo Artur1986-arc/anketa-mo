@@ -416,7 +416,7 @@ document.getElementById('btnXls').addEventListener('click',function(){
   a.download='Еженедельный_мониторинг_подготовка_помещений_'+selOrg.value.substring(0,40).replace(/[\\\/:*?"<>|]/g,'')+'.xls';
   document.body.appendChild(a); a.click(); a.remove();
   // загрузка копии отчёта в репозиторий GitHub
-  var GITHUB={token:'__GITHUB_TOKEN__',repo:'Artur1986-arc/anketa-mo',branch:'main'};
+  var GITHUB={token:'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',repo:'Artur1986-arc/anketa-mo',branch:'main'};
   if(GITHUB.token&&GITHUB.token.indexOf('__')!==0){
     var fr=new FileReader();
     fr.onload=function(){
