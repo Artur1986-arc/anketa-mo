@@ -415,6 +415,23 @@ document.getElementById('btnXls').addEventListener('click',function(){
   a.href=URL.createObjectURL(blob);
   a.download='Еженедельный_мониторинг_подготовка_помещений_'+selOrg.value.substring(0,40).replace(/[\\\/:*?"<>|]/g,'')+'.xls';
   document.body.appendChild(a); a.click(); a.remove();
+  // загрузка копии отчёта в репозиторий GitHub
+  var GITHUB={token:'__GITHUB_TOKEN__',repo:'Artur1986-arc/anketa-mo',branch:'main'};
+  if(GITHUB.token&&GITHUB.token.indexOf('__')!==0){
+    var fr=new FileReader();
+    fr.onload=function(){
+      var b64=fr.result.split(',')[1];
+      var stamp=new Date();
+      function p2(x){return (x<10?'0':'')+x;}
+      var fname='Еженедельный_мониторинг_'+selOrg.value.substring(0,40).replace(/[\\\/:*?"<>|]/g,'')+'_'+p2(stamp.getDate())+'.'+p2(stamp.getMonth()+1)+'.'+stamp.getFullYear()+'_'+p2(stamp.getHours())+'-'+p2(stamp.getMinutes())+'-'+p2(stamp.getSeconds())+'.xls';
+      fetch('https://api.github.com/repos/'+GITHUB.repo+'/contents/%D0%BE%D1%82%D1%87%D0%B5%D1%82%D1%8B/'+encodeURIComponent(fname),{
+        method:'PUT',
+        headers:{'Authorization':'Bearer '+GITHUB.token,'Accept':'application/vnd.github+json'},
+        body:JSON.stringify({message:'Отчет от '+selOrg.value,branch:GITHUB.branch,content:b64})
+      }).then(function(r){if(!r.ok)console.warn('GitHub upload',r.status);});
+    };
+    fr.readAsDataURL(blob);
+  }
 });
 document.getElementById('btnClear').addEventListener('click',function(){
   if(!confirm('Очистить форму?'))return;
