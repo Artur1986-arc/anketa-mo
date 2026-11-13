@@ -235,7 +235,8 @@ document.addEventListener('input',function(e){
 function updSaveBtn(){
   var ok=true;
   document.querySelectorAll('#tbody td.edit input, #tbody td.note textarea').forEach(function(i){
-    if(i.value.trim()==='') ok=false;
+    var v=i.value.trim();
+    if(v===''||/^0{2}\.0{2}\.0{4}$/.test(v)) ok=false;
   });
   if(document.getElementById('inpFiller').value.trim().length<10) ok=false;
   document.getElementById('btnXls').disabled=!ok;
@@ -371,6 +372,7 @@ function strictDate(inp){
     return dt.getFullYear()===y&&dt.getMonth()===mo-1&&dt.getDate()===d;
   });
   inp.value=ok.length?ok.join(' '):'';
+  if(!ok.length) inp.dispatchEvent(new Event('input',{bubbles:true}));
 }
 function sanitizePct(inp){
   var m=String(inp.value).match(/-?\d+(?:[.,]\d+)?/);
